@@ -6,13 +6,16 @@ using System.Text.RegularExpressions;
 
 namespace Parser {
     public class IniParser {
+    //Главное поле - список секций
         private List<Section> Sections = new();
 
         public class Section {
+            //Поля - имя секции и список параметров ей принадлежащих
             public string Name;
             public List<Parameter> Parameters;
 
             public class Parameter {
+                //Поля - имя параметра и его значение
                 public string Name;
                 public string Value;
 
@@ -32,12 +35,6 @@ namespace Parser {
                 Parameters = parameters;
             }
         }
-
-        //old fix (works only for \n)
-        // private static string Fix(string text) {
-        //     return Regex.Replace(Regex.Replace(text.Replace(" ", "").Replace("\t", ""), @"\;.+$", string.Empty,
-        //             RegexOptions.Multiline).Trim('\n'), @"[\n]{2,}", "\n");
-        // }
 
         // private static string Reforming(string text) {
         //     //Перевод текста в нормальный вид (без комментариев, без ненужных пробелов, без лишних переносов строки)
