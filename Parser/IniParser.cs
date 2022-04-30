@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace Parser {
     public class IniParser {
-    //Главное поле - список секций
+        //Главное поле - список секций
         private List<Section> Sections = new();
 
         public class Section {
@@ -19,10 +19,11 @@ namespace Parser {
                 public string Name;
                 public string Value;
 
-                public Parameter(string parameter) {
-                    var text = parameter.Split('=');
-                    Name = text[0];
-                    Value = text[1].TrimEnd('\n');
+                public Parameter(string Parameter) {
+                    //Конструктор параметра разделяет строку вида name=value на name и value ссответственно
+                    var Text = Parameter.Split('=');
+                    Name = Text[0];
+                    Value = Text[1].TrimEnd('\n');
                 }
 
                 public override string ToString() {
@@ -30,19 +31,11 @@ namespace Parser {
                 }
             }
 
-            public Section(string name, List<Parameter> parameters) {
-                Name = name;
-                Parameters = parameters;
+            public Section(string Name, List<Parameter> Parameters) {
+                this.Name = Name;
+                this.Parameters = Parameters;
             }
         }
-
-        // private static string Reforming(string text) {
-        //     //Перевод текста в нормальный вид (без комментариев, без ненужных пробелов, без лишних переносов строки)
-        //
-        //     return Regex.Replace(Regex.Replace(Regex.Replace(text, @"\s*=\s*", "="), @"\;.+$",
-        //             string.Empty,
-        //             RegexOptions.Multiline).Trim("\n\r".ToCharArray()), @"[\n\r]{2,}", "\n");
-        // }
 
         private static string Reforming(string text) {
             //Перевод текста в нормальный вид (без комментариев, без ненужных пробелов, без лишних переносов строки)
@@ -62,6 +55,7 @@ namespace Parser {
 
             //Чтение всего текста в единую строку
             var text = File.ReadAllText(path);
+            
             //Перевод всего текста в нужный вид
             text = Reforming(text) + '\n';
 
@@ -74,10 +68,12 @@ namespace Parser {
             for (var i = 0; i < SectionsParsed.Length; ++i) {
                 //Список параметров
                 var Parameters = new List<Section.Parameter>();
+                
                 //Для каждого параметра (то что соответстует паттерну @".+=.+")
                 //добавляем в список через конструктор параметра
                 foreach (var item in Regex.Matches(ParameterStringList[i].ToString(), @".+=.+"))
                     Parameters.Add(new Section.Parameter(item.ToString()));
+                
                 Sections.Add(new Section(SectionsParsed[i].ToString().Trim("[]".ToCharArray()), Parameters));
             }
         }
